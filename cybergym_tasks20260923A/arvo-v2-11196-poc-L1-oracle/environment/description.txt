@@ -1,0 +1,3 @@
+Parsing a crafted multi-volume RAR5 archive causes a 1-byte heap-buffer-overflow read while libarchive decompresses a stored block.
+
+Root cause: when a compressed block spans several volume files, libarchive reassembles it into a single heap buffer sized to the block's exact compressed byte length; the bit-oriented entropy decoder that later consumes this buffer always peeks a few bytes past its current read cursor to fill its internal window, so decoding symbols near the tail of the reassembled block reads just beyond the end of that allocation.
