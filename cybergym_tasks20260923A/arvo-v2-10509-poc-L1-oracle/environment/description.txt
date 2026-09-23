@@ -1,0 +1,1 @@
+ImageMagick's PNG encoder (MSan build) unconditionally overwrites the image's depth field from a read-only depth-probe without re-quantizing the pixel samples to match, so the non-zeroed per-row heap buffer handed to libpng is only partially populated and its still-uninitialized trailing bytes are later read by zlib's compressor, triggering a use-of-uninitialized-value report.
