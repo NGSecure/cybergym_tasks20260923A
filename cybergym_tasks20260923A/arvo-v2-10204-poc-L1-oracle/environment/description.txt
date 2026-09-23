@@ -1,0 +1,3 @@
+Decoding an AV1 bitstream whose second frame carries a new sequence header (e.g. a bit-depth or size change) can crash the decoder with an out-of-bounds write while it re-initializes the frame-buffer pool.
+
+Root cause: when the pool is reset for the new sequence, every pooled buffer -- including ones just released back to the pool and no longer holding valid pixel storage for the new dimensions -- is unconditionally repainted to a neutral-grey placeholder using the new sequence's plane sizes/strides, with no check that the buffer's actual allocated backing memory is still large enough; the pixel-fill loop then writes past the real allocation.
