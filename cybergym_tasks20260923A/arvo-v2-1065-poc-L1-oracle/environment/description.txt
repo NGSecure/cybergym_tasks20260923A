@@ -1,0 +1,1 @@
+A bug in file/libmagic (MSan use-of-uninitialized-value) occurs while classifying input against a rule using a POSIX extended regular expression: when alternation leaves some capturing groups unused, the C regex engine does not fill every slot of the caller's result array, and the caller later reads a slot that was never written, exposing stale stack data.
